@@ -1,0 +1,21 @@
+{
+  "name": "community-info-scraper",
+  "version": "0.0.1",
+  "description": "A specialized scraper to scrape community information.",
+  "author": "Nickolas Kenyeres <nkenyeres@gmail.com> (http://knicklabs.github.com)",
+  "license": "MIT",
+  "main": "./index.js",
+  "dependencies": {
+    "cheerio": "~0.12.4",
+    "request": "~2.27.0",
+    "string": "~1.7.0",
+    "optimist": "~0.6.0",
+    "mkdirp": "~0.3.5"
+  },
+  "bin": {
+    "community-info-scraper": "./bin/index.bin.js"
+  },
+  "engine": {
+    "node": ">=0.10"
+  }
+}
