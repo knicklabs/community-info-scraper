@@ -18,4 +18,4 @@ if (!argv.url || !argv.directory) {
   process.exit(1);
 }
 
-scraper(argv.url, argv.directory);
+scraper(argv.url, argv.directory, (typeof argv.results !== 'undefined')); 

@@ -5,9 +5,10 @@ var request = require('request')
   , cheerio = require('cheerio')
   , fs      = require('fs')
   , s       = require('string')
-  , mkdirp  = require('mkdirp');
-   
-module.exports = function(baseUrl, directory) {
+  , mkdirp  = require('mkdirp')
+  , URL     = require('url');
+ 
+module.exports = function(baseUrl, directory, resultsPage) {
   var searchRoot = 'bresults.asp?';
   
   if (baseUrl.substr(-1) == '/') {
@@ -20,13 +21,27 @@ module.exports = function(baseUrl, directory) {
     }
     
     var $ = cheerio.load(body);
-    $('#QuickList').find('option').each(function() {
-      var category = $(this).text()
-        , cid = $(this).val()
-        , url = [baseUrl, searchRoot].join('/') + 'STerms=&SType=A&CMType=L&PBID='+cid+'&NUM=';
-        
-        parseCategory(url, category);
-    });
+    
+    if (resultsPage) {
+      $('.DetailsLink').each(function() {
+        var url = $(this).attr('href')
+          , id  = $(this).data('num');
+          
+         if (url && id) {
+           var urlParts = URL.parse(baseUrl);
+           url = urlParts.protocol + '//' + urlParts.host + url;
+           parseRecord(url, 'results', id);
+         }
+      });
+    } else {
+      $('#QuickList').find('option').each(function() {
+        var category = $(this).text()
+          , cid = $(this).val()
+          , url = [baseUrl, searchRoot].join('/') + 'STerms=&SType=A&CMType=L&PBID='+cid+'&NUM=';
+          
+          parseCategory(url, category);
+      }); 
+    }
   });
 
   function parseCategory(url, category) {
